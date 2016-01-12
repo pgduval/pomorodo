@@ -1,0 +1,120 @@
+<html>
+<head>
+
+ <title>The Simple Pomorodo Clock</title>
+
+</head>
+<body>
+
+<br>
+<h1>The Simple Pomorodo Clock</h1>
+<br>
+
+<div class="btn-session">
+<p> Session Time: 
+  <span id="session-minutes">25</span>
+  <span id="session-middle">:</span>
+  <span id="session-seconds">00</span>
+</p>
+<button type="button" id="button-session-plus">+</button>
+<button type="button" id="button-session-minus">-</button>
+<button type="button" id="button-session-start">Start</button>
+<button type="button" id="button-session-stop">Stop</button>
+</div>
+
+<div class="btn-break">
+<p> Break Time: <span id="break-time">5:00</span></p>
+<button type="button" id="button-break-plus">+</button>
+<button type="button" id="button-break-minus">-</button>
+<button type="button" id="button-break-start">Start</button>
+<button type="button" id="button-break-stop">Stop</button>
+</div>
+
+
+<script type="text/javascript">
+
+    // Define initial time
+    var sessionTime = 25 ;
+    var breakTime = 5;
+
+    // Session Timer
+    // var sessionTime = document.getElementById('session-time');
+    var sessionplus = document.getElementById('button-session-plus');
+    var sessionminus = document.getElementById('button-session-minus');
+    var sessionStart = document.getElementById('button-session-start');
+    var sessionStop = document.getElementById('button-session-stop');
+    var sessionRunning = false;
+
+    var increaseSessionTime = function(){
+        sessionTime.textContent = parseInt(sessionTime.textContent) + 1 + ":00";
+    }
+
+    // Prevent Decrease Below 0
+    var decreaseSessionTime = function(){
+
+        var currentTime = parseInt(sessionTime.textContent);
+
+        if ((currentTime - 1) > 0) {
+            sessionTime.textContent = currentTime - 1 + ":00";
+        } else {
+            sessionTime.textContent = 0 + ":00";
+            stopCountDown();
+        }
+        
+    }
+
+    var startCountDown = function(){
+        if (!sessionRunning){
+            sessionTimer = window.setInterval(decreaseSessionTime, 1000);
+            sessionRunning = true;
+        }
+        
+    }
+
+    var stopCountDown = function(){
+        window.clearInterval(sessionTimer);
+        sessionRunning = false;
+        console.log("hit");
+    }
+
+    sessionplus.addEventListener("click", increaseSessionTime);
+    sessionminus.addEventListener("click", decreaseSessionTime);
+    sessionStart.addEventListener("click", startCountDown);
+    sessionStop.addEventListener("click", stopCountDown);
+
+
+
+
+
+
+    // Break Timer
+    var breakTime = document.getElementById('break-time');
+    var breakplus = document.getElementById('button-break-plus');
+    var breakminus = document.getElementById('button-break-minus');
+
+    var increaseBreakTime = function(){
+        breakTime.textContent = parseInt(breakTime.textContent) + 1 + ":00";
+    }
+
+    // Prevent Decrease Below 0
+    var decreaseBreakTime = function(){
+
+        var currentTime = parseInt(breakTime.textContent);
+
+        if ((currentTime - 1) > 0) {
+            breakTime.textContent = currentTime - 1 + ":00";
+        } else {
+            breakTime.textContent = 0 + ":00";
+        }
+        
+    }
+
+    breakplus.addEventListener("click", increaseBreakTime);
+    breakminus.addEventListener("click", decreaseBreakTime);
+
+
+
+</script>
+
+</body>
+</html>
