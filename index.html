@@ -23,7 +23,11 @@
 </div>
 
 <div class="btn-break">
-<p> Break Time: <span id="break-time">5:00</span></p>
+<p> Break Time: 
+  <span id="break-minutes">5</span>
+  <span id="break-middle">:</span>
+  <span id="break-seconds">00</span>
+</p>
 <button type="button" id="button-break-plus">+</button>
 <button type="button" id="button-break-minus">-</button>
 <button type="button" id="button-break-start">Start</button>
@@ -67,7 +71,7 @@
     updateTime(timeObj);
 
     var increaseSessionTime = function(){
-        sessionTime = sessionTime + (1 * 60) ;
+        sessionTime += (1 * 60) ;
         var timeObj = computeTime(sessionTime);
         updateTime(timeObj);
     }
@@ -76,7 +80,7 @@
     var decreaseSessionTime = function(){
 
         if ((sessionTime - 1) > 0) {
-            sessionTime = sessionTime - (1 * 60) ;
+            sessionTime -= (1 * 60) ;
             var timeObj = computeTime(sessionTime);
             updateTime(timeObj);
         } else {
