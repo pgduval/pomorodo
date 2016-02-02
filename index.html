@@ -23,7 +23,11 @@
 </div>
 
 <div class="btn-break">
-<p> Break Time: <span id="break-time">5:00</span></p>
+<p> Break Time: 
+  <span id="break-minutes">5</span>
+  <span id="break-middle">:</span>
+  <span id="break-seconds">00</span>
+</p>
 <button type="button" id="button-break-plus">+</button>
 <button type="button" id="button-break-minus">-</button>
 <button type="button" id="button-break-start">Start</button>
@@ -34,38 +38,77 @@
 <script type="text/javascript">
 
     // Define initial time
-    var sessionTime = 25 ;
-    var breakTime = 5;
+    var sessionTime = 25 * 60;
+    var breakTime = 5 * 60;
 
     // Session Timer
-    // var sessionTime = document.getElementById('session-time');
+    var sessionMinute = document.getElementById('session-minutes');
+    var sessionSecond = document.getElementById('session-seconds');
+
     var sessionplus = document.getElementById('button-session-plus');
     var sessionminus = document.getElementById('button-session-minus');
     var sessionStart = document.getElementById('button-session-start');
     var sessionStop = document.getElementById('button-session-stop');
     var sessionRunning = false;
 
+    var computeTime = function(sessionTime){
+      // calculate the minutes and seconds from sessionTime
+      mins = Math.floor(sessionTime / 60);
+      secs = sessionTime - mins * 60;
+
+      return { minute : mins, 
+               seconde : secs }
+    }
+
+     var updateTime = function(timeObj){
+        // change the HTML to show new minutes and seconds
+        sessionMinute.textContent = (timeObj.minute < 10 ? '0' : '') + timeObj.minute;
+        sessionSecond.textContent = (timeObj.seconde < 10 ? '0' : '') + timeObj.seconde;
+    }
+   
+    // Initialize timer at load time
+    var timeObj = computeTime(sessionTime);
+    updateTime(timeObj);
+
     var increaseSessionTime = function(){
-        sessionTime.textContent = parseInt(sessionTime.textContent) + 1 + ":00";
+        sessionTime += (1 * 60) ;
+        var timeObj = computeTime(sessionTime);
+        updateTime(timeObj);
     }
 
     // Prevent Decrease Below 0
     var decreaseSessionTime = function(){
 
-        var currentTime = parseInt(sessionTime.textContent);
-
-        if ((currentTime - 1) > 0) {
-            sessionTime.textContent = currentTime - 1 + ":00";
+        if ((sessionTime - 1) > 0) {
+            sessionTime -= (1 * 60) ;
+            var timeObj = computeTime(sessionTime);
+            updateTime(timeObj);
         } else {
-            sessionTime.textContent = 0 + ":00";
-            stopCountDown();
+            sessionTime = 0;
+            var timeObj = computeTime(sessionTime);
+            updateTime(timeObj);
         }
         
     }
 
+    var countDown = function(){
+
+        if ((sessionTime - 1) > 0) {
+            sessionTime -= 1;
+            var timeObj = computeTime(sessionTime);
+            updateTime(timeObj);
+        } else {
+            sessionTime = 0;
+            var timeObj = computeTime(sessionTime);
+            updateTime(timeObj);
+            stopCountDown();
+        }
+        
+    }    
+
     var startCountDown = function(){
         if (!sessionRunning){
-            sessionTimer = window.setInterval(decreaseSessionTime, 1000);
+            sessionTimer = window.setInterval(countDown, 1000);
             sessionRunning = true;
         }
         
@@ -74,43 +117,12 @@
     var stopCountDown = function(){
         window.clearInterval(sessionTimer);
         sessionRunning = false;
-        console.log("hit");
     }
 
     sessionplus.addEventListener("click", increaseSessionTime);
     sessionminus.addEventListener("click", decreaseSessionTime);
     sessionStart.addEventListener("click", startCountDown);
     sessionStop.addEventListener("click", stopCountDown);
-
-
-
-
-
-
-    // Break Timer
-    var breakTime = document.getElementById('break-time');
-    var breakplus = document.getElementById('button-break-plus');
-    var breakminus = document.getElementById('button-break-minus');
-
-    var increaseBreakTime = function(){
-        breakTime.textContent = parseInt(breakTime.textContent) + 1 + ":00";
-    }
-
-    // Prevent Decrease Below 0
-    var decreaseBreakTime = function(){
-
-        var currentTime = parseInt(breakTime.textContent);
-
-        if ((currentTime - 1) > 0) {
-            breakTime.textContent = currentTime - 1 + ":00";
-        } else {
-            breakTime.textContent = 0 + ":00";
-        }
-        
-    }
-
-    breakplus.addEventListener("click", increaseBreakTime);
-    breakminus.addEventListener("click", decreaseBreakTime);
 
 
 
